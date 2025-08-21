@@ -189,7 +189,7 @@ def draw_circles_only(count: int, filled: int, size: Tuple[int, int], show_perce
     cell_h = grid_h / rows
     diameter = int(min(cell_w, cell_h) * 0.8)
     radius = diameter // 2
-    x0 = (W - cols * cell_w) / 2
+    x0 = (W - cols * cell_w) / 2 
     y0 = (H - rows * cell_h) / 2
 
     for i in range(count):
@@ -241,6 +241,19 @@ def view_day() -> Tuple[int, int]:
     now = datetime.now()
     count = 24
     filled = now.hour
+    return count, filled
+
+def view_day_5min() -> Tuple[int, int]:
+    now = datetime.now()
+    count = 24 * 12 
+
+    hours_passed = now.hour
+    minutes_passed = now.minute
+    
+    total_minutes_passed = hours_passed * 60 + minutes_passed
+    
+    filled = total_minutes_passed // 5
+    
     return count, filled
 
 def view_month_day() -> Tuple[int, int]:
@@ -303,6 +316,7 @@ def view_lifetime_months() -> Tuple[int, int]:
 
 VIEW_MAP = {
     "day": view_day,
+    "day-5min": view_day_5min,
     "month-day": view_month_day,
     "month-hours": view_month_hours,
     "year-months": view_year_months,
@@ -357,16 +371,18 @@ Color formats:
   - RGB values: rgb(r,g,b) or r,g,b (e.g., rgb(255,0,0) or 255,0,0)
 
 Mode descriptions:
-  - day: Shows 24 circles representing hours in the current day
-  - month-day: Shows circles for each day in the current month (days completed)
-  - month-hours: Shows circles for each hour in the current month (hours completed)
-  - year-months: Shows 12 circles representing months in the current year
-  - year-days: Shows circles for each day in the current year
-  - lifetime-years: Shows circles representing years in your expected lifetime
-  - lifetime-months: Shows circles representing months in your expected lifetime
+  - day: 1 circle = 1 hour today
+  - day-5min: 1 circle = 5 minutes today
+  - month-day: 1 circle = 1 day this month
+  - month-hours: 1 circle = 1 hour this month
+  - year-months: 1 circle = 1 month this year
+  - year-days: 1 circle = 1 day this year
+  - lifetime-years: 1 circle = 1 year in your expected lifetime
+  - lifetime-months: 1 circle = 1 month in your expected lifetime
 
 Examples:
   python script.py --mode day --show-percentage
+  python script.py --mode day-5min --show-percentage
   python script.py --mode month-hours --show-percentage
   python script.py --mode lifetime-years --dob 1990-05-15 --show-percentage --percentage-color yellow
   python script.py --bg-color "#1a1a1a" --filled-color "#00ff00" --hollow-color "#ff6600" --show-percentage 
@@ -404,11 +420,11 @@ Examples:
     if mode not in VIEW_MAP:
         raise SystemExit(f"Unknown mode '{mode}'. Choose one of: {', '.join(VIEW_MAP)}")
 
-    if args.bg_color:
+    if args.bg_color: 
         try:
             BACKGROUND = parse_color(args.bg_color)
         except ValueError as e:
-            raise SystemExit(f"Invalid background color: {e}")
+            raise SystemExit(f"Invalid background color: {e}") 
     
     if args.filled_color:
         try:
@@ -422,7 +438,7 @@ Examples:
         except ValueError as e:
             raise SystemExit(f"Invalid hollow color: {e}")
     
-    if args.percentage_color:
+    if args.percentage_color: 
         try:
             PERCENTAGE_COLOR = parse_color(args.percentage_color)
         except ValueError as e:
@@ -474,4 +490,4 @@ Examples:
         print("Preview mode: wallpaper not set automatically.") 
 
 if __name__ == "__main__":
-    main() 
+    main()
